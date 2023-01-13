@@ -23,8 +23,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <main.java.package>com.github.xgp.keycloak</main.java.package>
     <junit.version>4.13.2</junit.version>
-    <keycloak.version>20.0.1</keycloak.version>
-    <lombok.version>1.18.22</lombok.version>
+    <keycloak.version>20.0.2</keycloak.version>
+    <lombok.version>1.18.24</lombok.version>
     <auto-service.version>1.0.1</auto-service.version>
     <ossrh.url>https://s01.oss.sonatype.org</ossrh.url>
     <maven.test.skip>true</maven.test.skip>
@@ -203,7 +203,7 @@
     <dependency>
       <groupId>org.openjdk.nashorn</groupId>
       <artifactId>nashorn-core</artifactId>
-      <version>15.3</version>
+      <version>15.4</version>
       <scope>provided</scope>
     </dependency>
 

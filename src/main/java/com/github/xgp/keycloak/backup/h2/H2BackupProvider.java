@@ -50,4 +50,6 @@ public class H2BackupProvider implements DatabaseBackupProvider {
   @Override
   public void close() {}
 
+  //trim backup files to a certain number
+  // https://www.logicbig.com/how-to/java-io/delete-old-files.html
 }
