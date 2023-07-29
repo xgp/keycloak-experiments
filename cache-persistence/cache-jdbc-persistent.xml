@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:infinispan:config:13.0"
+        xsi:schemaLocation="urn:infinispan:config:13.0 https://infinispan.org/schemas/infinispan-config-13.0.xsd urn:infinispan:server:13.0 https://infinispan.org/schemas/infinispan-server-13.0.xsd">
+  <cache-container name="keycloak">
+
+    <!-- templates -->
+    <local-cache-configuration name="local-persistent"
+			       xmlns:jdbc="urn:infinispan:config:store:jdbc:13.0">
+      <expiration lifespan="-1"/>
+      <memory max-count="1000"/>
+      <locking isolation="REPEATABLE_READ"
+               striping="false"
+               acquire-timeout="10000"
+               concurrency-level="32"/>
+      <transaction mode="NON_XA"
+                   locking="OPTIMISTIC"/>
+      <persistence passivation="false">
+        <string-keyed-jdbc-store shared="false" xmlns="urn:infinispan:config:store:jdbc:13.0" key-to-string-mapper="io.phasetwo.ispn.KeycloakTwoWayKey2StringMapper">
+        <connection-pool driver="${env.KC_ISPN_DB_DRIVER:org.postgresql.Driver}"
+                         connection-url="jdbc:${env.KC_ISPN_DB_VENDOR:postgresql}://${env.KC_DB_URL_HOST}:${env.KC_DB_URL_PORT:5432}/${env.KC_DB_URL_DATABASE}${env.KC_DB_URL_PROPERTIES}"
+                         username="${env.KC_DB_USERNAME}"
+                         password="${env.KC_DB_PASSWORD}"/>
+          <string-keyed-table drop-on-exit="false" prefix="ispn">
+            <id-column name="id" type="VARCHAR(1024)" />
+            <data-column name="data" type="BYTEA" />
+            <timestamp-column name="ts" type="BIGINT" />
+            <segment-column name="seg" type="INT" />
+          </string-keyed-table>
+        </string-keyed-jdbc-store>
+      </persistence>
+    </local-cache-configuration>
+    <local-cache-configuration name="local-ephemeral">
+      <encoding>
+	<key media-type="application/x-java-object"/>
+	<value media-type="application/x-java-object"/>
+      </encoding>
+      <memory max-count="10000"/>
+    </local-cache-configuration>
+    
+    <!-- persistent caches -->
+    <local-cache name="work" configuration="local-persistent"/>
+    <local-cache name="sessions" configuration="local-persistent"/>
+    <local-cache name="authenticationSessions" configuration="local-persistent"/>
+    <local-cache name="offlineSessions" configuration="local-persistent"/>
+    <local-cache name="clientSessions" configuration="local-persistent"/>
+    <local-cache name="offlineClientSessions" configuration="local-persistent"/>
+    <local-cache name="loginFailures" configuration="local-persistent"/>
+    <local-cache name="actionTokens" configuration="local-persistent"/>
+
+    <!-- ephemeral caches -->
+    <local-cache name="realms" configuration="local-ephemeral"/>
+    <local-cache name="users" configuration="local-ephemeral"/>
+    <local-cache name="authorization" configuration="local-ephemeral"/>
+    <local-cache name="keys" configuration="local-ephemeral">
+      <expiration max-idle="3600000"/>
+    </local-cache>
+
+  </cache-container>
+</infinispan>
