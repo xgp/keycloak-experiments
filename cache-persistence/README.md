@@ -2,9 +2,9 @@
 
 ### Why is Infinispan the bane of Keycloak adoption?
 
-"You know that you will lose sessions on restart and upgrade."
+**"You know that you will lose sessions on restart and upgrade."**
 
-"Wait. WHAT?!?"
+**"Wait. WHAT?!?"**
 
 Infinispan uses JGroups for internal communication. When JGroups or Infinispan is upgraded, new cluster members cannot be added because of protocol incompatibility. This effects adding nodes of different versions of Keycloak, and when using external Infinispan.
 
@@ -19,13 +19,13 @@ It may be necessary to upgrade external Infinispan, either because of vulnerabil
 - Turn off Infinispan/JGroups discovery and clustering. Each Keycloak node thinks it's a singleton.
 - Make a JDBC cache store for previously "distributed" caches, where all entries are stored immediately (i.e. set passivation=false). This store is shared by all Keycloak nodes.
 
-This seems to solve both the JGroups communication incompatibility (by eliminating it) and 
+This seems to solve both the JGroups communication incompatibility (by eliminating it) and essentially eliminates Infinispan, other than a local cach and single way to read/write to a set of stores.
 
 #### Problems
 
-- Keycloak uses `Externalizer` for some of it's keys. We had to write a `Key2StringMapper` for those.
-- Key length can be long, so the id/key in the database has to be `VARCHAR(1024)`
-- While we haven't encountered it yet, there may be collisions if 2 nodes are trying to read/write the same key at the same time.
-- More local memory consumption
-- Lots of database reads/writes
-- Simultaneous startup with multiple Keycloaks may fail if they try to create the `ispn_*` tables at exactly the same time
+- Keycloak uses `Externalizer` for some of it's keys. We had to write a `Key2StringMapper` for those that runs the externalizer and creates a string ( uFEFF + 1 char identifier + FQCN + uFEFF + base64(bytes from externalizer) ).
+  - Key length can be long, so the id/key in the database has to be `VARCHAR(1024)` (at least? - need to verify)
+- While we haven't encountered it yet, there may be collisions if 2 nodes are trying to read/write the same key at the same time. Not sure if there are transaction flags that can be used to avoid this.
+- More local memory consumption, as the local/memory caches are duplicated.
+- Lots of database reads/writes. (Need to quantify this)
+- Simultaneous startup with multiple Keycloaks may fail if they try to create the `ispn_*` tables at exactly the same time.
