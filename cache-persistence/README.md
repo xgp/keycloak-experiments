@@ -2,7 +2,7 @@
 
 ### Why is Infinispan the bane of Keycloak adoption?
 
-"You know that you will lose sessions on restart and upgrade."*
+*"You know that you will lose sessions on restart and upgrade."*
 
 **"Wait. WHAT?!?"**
 
