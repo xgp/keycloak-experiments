@@ -19,7 +19,7 @@ It may be necessary to upgrade external Infinispan, either because of vulnerabil
 - Turn off Infinispan/JGroups discovery and clustering. Each Keycloak node thinks it's a singleton.
 - Make a JDBC cache store for previously "distributed" caches, where all entries are stored immediately (i.e. set passivation=false). This store is shared by all Keycloak nodes.
 
-This seems to solve both the JGroups communication incompatibility (by eliminating it) and essentially eliminates Infinispan, other than a local cach and single way to read/write to a set of stores.
+This seems to solve both the JGroups communication incompatibility (by eliminating it) and essentially eliminates Infinispan, other than a local cache and single way to read/write to a set of stores.
 
 #### Problems
 
@@ -29,3 +29,4 @@ This seems to solve both the JGroups communication incompatibility (by eliminati
 - More local memory consumption, as the local/memory caches are duplicated.
 - Lots of database reads/writes. (Need to quantify this)
 - Simultaneous startup with multiple Keycloaks may fail if they try to create the `ispn_*` tables at exactly the same time.
+- I suspect there is also a problem with JBoss Marshalling, as it's unknown (to me) whether or not changes in the objects will ser/de the same bytes without exception.
