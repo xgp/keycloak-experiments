@@ -9,7 +9,7 @@
     <local-cache-configuration name="local-persistent"
 			       xmlns:jdbc="urn:infinispan:config:store:jdbc:13.0">
       <expiration lifespan="-1"/>
-      <memory max-count="1000"/>
+      <memory max-count="1"/>
       <locking isolation="REPEATABLE_READ"
                striping="false"
                acquire-timeout="10000"
@@ -18,7 +18,7 @@
                    locking="OPTIMISTIC"/>
       <persistence passivation="false">
         <string-keyed-jdbc-store shared="false" xmlns="urn:infinispan:config:store:jdbc:13.0" key-to-string-mapper="io.phasetwo.ispn.KeycloakTwoWayKey2StringMapper">
-        <connection-pool driver="${env.KC_ISPN_DB_DRIVER:org.postgresql.Driver}"
+          <connection-pool driver="${env.KC_ISPN_DB_DRIVER:org.postgresql.Driver}"
                          connection-url="jdbc:${env.KC_ISPN_DB_VENDOR:postgresql}://${env.KC_DB_URL_HOST}:${env.KC_DB_URL_PORT:5432}/${env.KC_DB_URL_DATABASE}${env.KC_DB_URL_PROPERTIES}"
                          username="${env.KC_DB_USERNAME}"
                          password="${env.KC_DB_PASSWORD}"/>

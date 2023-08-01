@@ -44,7 +44,7 @@ services:
       KC_HOSTNAME_STRICT: 'false'
       KC_HTTP_ENABLED: 'true'
       KC_PROXY: 'edge'
-      KC_LOG_LEVEL: INFO
+      KC_LOG_LEVEL: "INFO,org.infinispan:TRACE,com.github.benmanes.caffeine:TRACE,org.infinispan.util.concurrent.BlockingManagerImpl:DEBUG,org.infinispan.persistence.manager.PersistenceManagerImpl:DEBUG,org.infinispan.persistence.jdbc.common.impl.connectionfactory.PooledConnectionFactory:DEBUG"
       KC_CACHE_CONFIG_FILE: cache-jdbc-persistent.xml
     depends_on:
       - postgres
@@ -76,7 +76,7 @@ services:
       KC_HOSTNAME_STRICT: 'false'
       KC_HTTP_ENABLED: 'true'
       KC_PROXY: 'edge'
-      KC_LOG_LEVEL: INFO
+      KC_LOG_LEVEL: "INFO,org.infinispan:TRACE,com.github.benmanes.caffeine:TRACE,org.infinispan.util.concurrent.BlockingManagerImpl:DEBUG,org.infinispan.persistence.manager.PersistenceManagerImpl:DEBUG,org.infinispan.persistence.jdbc.common.impl.connectionfactory.PooledConnectionFactory:DEBUG"
       KC_CACHE_CONFIG_FILE: cache-jdbc-persistent.xml
     depends_on:
       - postgres
