@@ -1,0 +1,96 @@
+version: '3'
+
+volumes:
+  cockroach_data:
+    driver: local
+  caddy_data:
+    driver: local
+
+services:
+  cockroach:
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - cockroach_data:/cockroach/cockroach-data
+    command: start-single-node --insecure
+    ports:
+      - 26257:26257
+  infinispan:
+    image: infinispan/server:14.0
+    volumes:
+      - ${PWD}:/user-config
+    command: -c /user-config/infinispan.xml
+    environment:
+      IDENTITIES_BATCH: /user-config/identities.batch
+    ports:
+      - 11222:11222
+      - 11333:11333
+  keycloak1:
+    image: quay.io/phasetwo/phasetwo-keycloak:latest
+    volumes:
+      - ${PWD}/cache-ispn-remote.xml:/opt/keycloak/conf/cache-ispn-remote.xml
+    environment:
+      KC_CACHE_CONFIG_FILE: cache-ispn-remote.xml
+      KC_DB: cockroach
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_TRANSACTION_XA_ENABLED: false
+      KC_TRANSACTION_JTA_ENABLED: false
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB_URL_HOST: cockroach
+      KC_DB_URL_PORT: 26257
+      KC_DB_URL_DATABASE: defaultdb
+      KC_DB_SCHEMA: public
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: ''
+      KC_DB_URL_PROPERTIES: '?'
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HTTP_ENABLED: 'true'
+      KC_PROXY: 'edge'
+      KC_LOG_LEVEL: INFO
+    ports:
+      - 8080:8080
+      - 8443:8443
+    depends_on:
+      - cockroach
+      - infinispan
+    entrypoint: /opt/keycloak/bin/kc.sh start-dev --spi-email-template-provider=freemarker-plus-mustache --spi-email-template-freemarker-plus-mustache-enabled=true --spi-theme-cache-themes=false --debug --cache=ispn
+  # keycloak2:
+  #   image: quay.io/phasetwo/phasetwo-keycloak:latest
+  #   volumes:
+  #     - ${PWD}/providers:/opt/keycloak/providers
+  #   environment:
+  #     KC_DB: cockroach
+  #     KC_HTTP_RELATIVE_PATH: /auth
+  #     KC_TRANSACTION_XA_ENABLED: false
+  #     KC_TRANSACTION_JTA_ENABLED: false
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #     KC_DB_URL_HOST: cockroach
+  #     KC_DB_URL_PORT: 26257
+  #     KC_DB_URL_DATABASE: defaultdb
+  #     KC_DB_SCHEMA: public
+  #     KC_DB_USERNAME: root
+  #     KC_DB_PASSWORD: ''
+  #     KC_DB_URL_PROPERTIES: '?'
+  #     KC_HOSTNAME_STRICT: 'false'
+  #     KC_HTTP_ENABLED: 'true'
+  #     KC_PROXY: 'edge'
+  #     KC_LOG_LEVEL: INFO
+  #   ports:
+  #     - 8080:8080
+  #     - 8443:8443
+  #   depends_on:
+  #     - cockroach
+  #   entrypoint: /opt/keycloak/bin/kc.sh start-dev --debug --cache=ispn
+  caddy:
+    image: caddy:2.4.6-alpine
+    restart: unless-stopped
+    command: caddy reverse-proxy --from https://localhost:443 --to http://keycloak:8080
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - caddy_data:/data
+    depends_on:
+      - keycloak1
+      # - keycloak2
