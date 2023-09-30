@@ -29,6 +29,7 @@ services:
     volumes:
       - ${PWD}/cache-ispn-remote.xml:/opt/keycloak/conf/cache-ispn-remote.xml
     environment:
+      KC_CACHE: local
       KC_CACHE_CONFIG_FILE: cache-ispn-remote.xml
       KC_DB: cockroach
       KC_HTTP_RELATIVE_PATH: /auth
