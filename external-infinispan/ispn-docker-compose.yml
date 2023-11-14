@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  infinispan:
+    image: infinispan/server:14.0
+    volumes:
+      - ${PWD}:/user-config
+    command: -c /user-config/infinispan.xml
+    environment:
+      IDENTITIES_BATCH: /user-config/identities.batch
+    ports:
+      - 11333:11333
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

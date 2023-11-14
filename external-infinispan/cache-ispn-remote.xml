@@ -47,7 +47,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -66,7 +66,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -85,7 +85,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -104,7 +104,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -123,7 +123,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -142,7 +142,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -162,7 +162,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>
@@ -182,7 +182,7 @@
                     shared="true"
                     raw-values="true"
                     marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
-        <remote-server host="infinispan" port="11333" />
+        <remote-server host="${env.ISPN_HOST}" port="11333" />
         <security>
           <authentication server-name="infinispan">
             <digest username="admin" password="admin" realm="default"/>

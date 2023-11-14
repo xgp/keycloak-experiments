@@ -7,7 +7,7 @@
     xmlns:server="urn:infinispan:server:14.0">
 
   <cache-container name="remoteKeycloak" statistics="true">
-    <transport cluster="${infinispan.cluster.name:globalCluster}" stack="${infinispan.cluster.stack:udp}" node-name="${infinispan.node.name:mainNode}" site="globalSite"/>
+    <transport cluster="${infinispan.cluster.name:globalCluster}" stack="${infinispan.cluster.stack:tcp}" node-name="${infinispan.node.name:mainNode}" site="globalSite"/>
     <security>
       <authorization/>
     </security>
